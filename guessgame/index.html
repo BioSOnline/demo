@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess Game</title>
+
+    <!-- CSS Styling -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #89f7fe, #66a6ff);
+            margin: 0;
+            padding: 0;
+        }
+        .guessbox {
+            border-radius: 15px;
+            border: 1px solid grey;
+            margin: 100px auto;
+            padding: 20px;
+            max-width: 400px;
+            min-height: 280px;
+            background: white;
+            text-align: center;
+            box-shadow: 0px 2px 15px rgba(0,0,0,0.2);
+        }
+        #update {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        #gnum {
+            border-radius: 10px;
+            padding: 10px;
+            outline: none;
+            border: 1px solid grey;
+            font-size: 16px;
+            width: 60%;
+            margin-top: 15px;
+        }
+        #enter {
+            background-color: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            margin-left: 8px;
+        }
+        #enter:hover {
+            background-color: #555;
+        }
+        #status {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+        #GuessList {
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="guessbox">
+        <div id="update">Guess a number between 1 and 100</div>
+        
+        <input id="gnum" type="number" placeholder="Enter a number" min="1" max="100">
+        <button id="enter">Guess</button>
+        
+        <p id="status"></p>
+        <p id="Guessed"></p>
+        <p id="GuessList"></p>
+    </div>
+
+    <!-- JavaScript in same file -->
+    <script>
+        // Game Variables
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let guesses = [];
+        const update = document.getElementById("update");
+        const gnum = document.getElementById("gnum");
+        const status = document.getElementById("status");
+        const guessedCount = document.getElementById("Guessed");
+        const guessList = document.getElementById("GuessList");
+
+        document.getElementById("enter").addEventListener("click", checkGuess);
+        gnum.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") checkGuess();
+        });
+
+        function checkGuess() {
+            let userGuess = Number(gnum.value);
+            if (!userGuess || userGuess < 1 || userGuess > 100) {
+                status.textContent = "❌ Please enter a number between 1 and 100!";
+                status.style.color = "red";
+                return;
+            }
+            guesses.push(userGuess);
+            
+            if (userGuess === randomNumber) {
+                status.textContent = "🎉 Correct! You guessed it in " + guesses.length + " attempts.";
+                status.style.color = "green";
+                update.textContent = "✅ Well Done!";
+                gnum.disabled = true;
+            } 
+            else if (userGuess < randomNumber) {
+                status.textContent = "📉 Too low! Try again.";
+                status.style.color = "orange";
+            } 
+            else {
+                status.textContent = "📈 Too high! Try again.";
+                status.style.color = "orange";
+            }
+
+            guessedCount.textContent = "Guesses so far: " + guesses.length;
+            guessList.textContent = "Your guesses: " + guesses.join(", ");
+            gnum.value = "";
+            gnum.focus();
+        }
+    </script>
+</body>
+</html>
+ 
